@@ -1,0 +1,73 @@
+// 379550.cc // Carl Johan Traeholt WALDORFF // ver. 21
+#include <iostream>
+#include <vector>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+enum SigType {SAWTOOTH, SQUARE, TRIANGLE};
+
+constexpr double EPSIL_DICHO(1e-9);
+constexpr double EPSIL_T(1e-13);
+
+struct Vars {
+	int nbL;
+	size_t nbC;
+	int nbN;
+	int tLine;			// number of line; time axis
+	double deltaT;
+	double deltaS;
+	double tMin;
+	double tMax;
+	double aMin;
+	double aMax;
+	SigType S;
+	};
+
+void print_error(string message);
+double sawtooth (int terms, double time);
+double square (int terms, double time);
+double triangle(int terms, double time);
+void mapSaw(const Vars &data, vector <vector <char>> &grid);
+void mapSquare(const Vars &data, vector <vector <char>> &grid);
+void mapTriangle(const Vars &data, vector <vector <char>> &grid);
+void mapTime (const Vars &data, vector <vector <char>> &grid);
+void mapSignal (const Vars &data, vector <vector <char>> &grid);
+void printGrid (const Vars &data, const vector <vector <char>> &grid);
+void getData(Vars &data);
+void getInterval (const Vars &data, double &inf, double &sup, double &max);
+void dicoMax (const int &nbN, double &inf, double &sup, double &max, 
+			  double &last_max, int &count, SigType S);
+
+
+int main() {
+	
+	Vars data;			//structure of variables
+	getData (data);
+	
+	// initialize  grid
+	vector <vector <char>> grid (data.nbL, vector<char> (data.nbC,' '));
+	
+	mapTime (data, grid);
+	
+	mapSignal (data, grid);
+	
+	printGrid (data, grid);
+	
+	double inf (0);
+	double sup (0);
+	double max (0);
+	
+	getInterval (data, inf, sup, max);
+	
+	double last_max (-1);
+	int count (0);
+	
+	dicoMax (data.nbN, inf, sup, max, last_max, count, data.S);
+
+	cout<< fixed << setprecision(8) << max;
+	
+	return 0;
+	}
