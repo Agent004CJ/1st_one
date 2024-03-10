@@ -1,0 +1,22 @@
+# fichier de configuration
+#
+
+# section livreurs
+
+2
+
+Martin 1
+Albert 0
+
+# section vehicules
+
+3
+
+123 1
+444 0
+98  1
+
+#section livraisons
+
+0
+
